@@ -1,5 +1,15 @@
-﻿namespace Lab12
+﻿using System;
+
+namespace Lab12
 {
+    enum Names : int
+    {
+        a = 0,
+        b = 1,
+        c = 2,
+        d = 3
+    }
+
     internal class Graph
     {
         private int[,] list;
@@ -20,42 +30,52 @@
             list[from, to] = cost;
         }
 
-        public IList<int> DijkstraAlgoritme(int start)
+        public void BFS(int from)
         {
-            List<int> distance = new List<int>();
             bool[] visited = new bool[n];
-            for(int i =0;i<n;i++)
+            Queue<int> turn = new Queue<int>();
+            turn.Enqueue(from);
+            visited[from] = true;
+            while (turn.Count != 0)
             {
-                distance.Add(int.MaxValue);
-                visited[i] = false;
-            }
+                int index = turn.Dequeue();
+                Console.WriteLine((Names)index);
 
-            distance[start] = 0;
-            int index = -1;
-            for(int i = 0; i< n;i++)
-            {
-                int min = int.MaxValue;
-                for(int j = 0; j < n; j++)
+                for (int i = 0; i < n; i++)
                 {
-                    if (!visited[j] && distance[j] <= min)
+                    if (list[index, i] != 0 && !visited[i])
                     {
-                        min = distance[j];
-                        index = j; 
-
+                        visited[i] = true;
+                        turn.Enqueue(i);
                     }
                 }
-                visited[index] = true;
-                for(int j =0;j<n; j++)
+            }
+        }
+
+        public void DFS(int from)
+        {
+            bool[] visited = new bool[n];
+            Stack<int> stack = new Stack<int>();
+
+            stack.Push(from);
+
+            while (stack.Count != 0)
+            {
+                int index = stack.Pop(); 
+
+                if (visited[index] != true) 
+                    Console.WriteLine((Names)index);
+
+                visited[index] = true; 
+
+                for (int i = 0; i < n; i++)
                 {
-                    if (!visited[j] &&
-                        list[index, j] > -1 &&
-                        distance[index] != int.MaxValue &&
-                        distance[index] + list[index, j] < distance[j])
-                            distance[j] = distance[index] + list[index, j];
+                    if (visited[i] != true && list[index, i] != 0)
+                    {
+                        stack.Push(i); 
+                    }
                 }
             }
-
-            return distance;
         }
     }
 }
