@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lab12
+﻿namespace Lab11
 {
     enum Names : int
     {
